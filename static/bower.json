@@ -1,7 +1,7 @@
 {
   "name": "bt-timesheet",
   "authors": [
-    "pepito@kapouet.net"
+    ""
   ],
   "description": "simple calendar with presence using bluetooth ping",
   "main": "",

@@ -32,32 +32,34 @@ def get_events():
             AND(Scan.q.timestamp>start_dt.float_timestamp, Scan.q.timestamp<end_dt.float_timestamp)
         ).orderBy('timestamp')
 
-    events = []
-    current_event = {}
+    periods = []
+    current_period = {}
     last_active_scan_timestamp = None
     for scan in active_scans:
-        if not current_event:
-            current_event['start'] = scan.timestamp
+        if not current_period:
+            current_period['start'] = scan.timestamp
             last_active_scan_timestamp = scan.timestamp
-        # delta between last present scan is more than x minutes
+        # delta between last present scan is more than x minutes change the value
+        # if you accept longer break far away of your computer,
+        # otherwise it will create a new period
         if pendulum.from_timestamp(scan.timestamp).diff(pendulum.from_timestamp(last_active_scan_timestamp)).in_minutes() > 5:
-            current_event['end'] = last_active_scan_timestamp
-            events.append(current_event)
-            current_event = {'start': scan.timestamp}
+            current_period['end'] = last_active_scan_timestamp
+            periods.append(current_period)
+            current_period = {'start': scan.timestamp}
         last_active_scan_timestamp = scan.timestamp
 
     # last in progress event
-    current_event['end'] = last_active_scan_timestamp
-    events.append(current_event)
+    current_period['end'] = last_active_scan_timestamp
+    periods.append(current_period)
     daily_summary = []
 
     last_day = None
     last_duration = pendulum.duration(minutes=0)
-    for event in events:
-        period = pendulum.from_timestamp(event['end']) - pendulum.from_timestamp(event['start'])
-        duration = pendulum.duration(minutes=period.in_minutes())
-        event['title'] = "Total : {hours:02}:{minutes:02}".format(hours=duration.hours, minutes=duration.minutes)
-        current_date_string = pendulum.from_timestamp(event['start']).to_date_string()
+    for period in periods:
+        time_period = pendulum.from_timestamp(period['end']) - pendulum.from_timestamp(period['start'])
+        duration = pendulum.duration(minutes=time_period.in_minutes())
+        period['title'] = "Total : {hours:02}:{minutes:02}".format(hours=duration.hours, minutes=duration.minutes)
+        current_date_string = pendulum.from_timestamp(period['start']).to_date_string()
 
         if not last_day or last_day == current_date_string:
             last_duration += duration
@@ -70,8 +72,8 @@ def get_events():
 
         last_day = current_date_string
 
-        event['start'] = pendulum.from_timestamp(event['start']).isoformat()
-        event['end'] = pendulum.from_timestamp(event['end']).isoformat()
+        period['start'] = pendulum.from_timestamp(period['start']).isoformat()
+        period['end'] = pendulum.from_timestamp(period['end']).isoformat()
 
     daily_summary.append(
         {
@@ -79,7 +81,7 @@ def get_events():
             'start': last_day
         })
 
-    return jsonify(events + daily_summary)
+    return jsonify(periods + daily_summary)
 
 
 if __name__ == '__main__':

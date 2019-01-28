@@ -67,10 +67,6 @@ def main(args):
     else:
         device = Device(mac_address=mac_address)
     Scan(timestamp=float(time.time()), device=device, present=not ret)
-    if ret == 0:
-        logging.debug("Device is present")
-    else:
-        logging.debug("Device is absent")
 
 
 if __name__ == '__main__':
