@@ -1,0 +1,3 @@
+pendulum
+Flask
+SQLObject==3.7.0

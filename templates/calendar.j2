@@ -1,0 +1,33 @@
+{% extends "base.j2" %}
+{% block content %}
+<div id='calendar'></div>
+<script>
+  $(function() {
+
+    $('#calendar').fullCalendar({
+        header: { center: 'month,agendaWeek' },
+        views: {
+            month: { // name of view
+                titleFormat: 'DD MMM YYYY',
+            },
+            week: { // name of view
+            }
+        },
+        defaultView: 'agendaWeek',
+        businessHours: {
+          // days of week. an array of zero-based day of week integers (0=Sunday)
+          {#dow: [ 1, 2, 3, 4, 5 ], // Monday, Tuesday, Wednesday, Thrusday, Friday #}
+          dow: [ 1, 2, 3, 5 ], // Monday, Tuesday, Wednesday, Friday
+
+          start: '7:00',
+          end: '18:00',
+        },
+        lazyFetching: true,
+        events: 'events.json',
+        timeFormat: 'H(:mm)',
+        timezone: 'local'
+    });
+
+  });
+</script>
+{% endblock %}
