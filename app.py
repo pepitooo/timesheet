@@ -61,10 +61,26 @@ def get_events():
         pivot[item['date']].append(time_period.in_minutes())
 
     daily_summary = [{'start': k, 'total_duration': sum(values)} for k, values in pivot.items()]
+
+    pivot_no_break = defaultdict(list)
+    for item in periods:
+        pivot_no_break[item['date']].append(item['start'])
+        pivot_no_break[item['date']].append(item['end'])
+
+    daily_no_break_summary = [{'start': k, 'start_ts': min(values), 'end_ts': max(values)} for k, values in pivot_no_break.items()]
+
     for item in daily_summary:
         duration = pendulum.duration(minutes=item['total_duration'])
         item['title'] = "Daily total : {hours:02}:{minutes:02}".format(hours=duration.hours, minutes=duration.minutes),
         item['color'] = '#257e4a'
+
+    for item in daily_no_break_summary:
+        time_period = pendulum.from_timestamp(item['end_ts']) - pendulum.from_timestamp(item['start_ts'])
+        duration = pendulum.duration(minutes=time_period.in_minutes())
+        item['title'] = "No break : {hours:02}:{minutes:02}".format(hours=duration.hours, minutes=duration.minutes)
+        item['color'] = '#FF6600'
+        del item['start_ts']
+        del item['end_ts']
 
     for period in periods:
         time_period = pendulum.from_timestamp(period['end']) - pendulum.from_timestamp(period['start'])
@@ -73,7 +89,9 @@ def get_events():
         period['start'] = pendulum.from_timestamp(period['start']).isoformat()
         period['end'] = pendulum.from_timestamp(period['end']).isoformat()
 
-    return jsonify(periods + daily_summary)
+    print(daily_no_break_summary)
+    print(daily_summary)
+    return jsonify(periods + daily_summary + daily_no_break_summary)
 
 
 if __name__ == '__main__':
