@@ -1,4 +1,5 @@
 import os
+from collections import defaultdict
 
 import pendulum
 
@@ -44,42 +45,33 @@ def get_events():
         # otherwise it will create a new period
         if pendulum.from_timestamp(scan.timestamp).diff(pendulum.from_timestamp(last_active_scan_timestamp)).in_minutes() > 5:
             current_period['end'] = last_active_scan_timestamp
+            current_period['date'] = pendulum.from_timestamp(last_active_scan_timestamp).to_date_string()
             periods.append(current_period)
             current_period = {'start': scan.timestamp}
         last_active_scan_timestamp = scan.timestamp
 
     # last in progress event
     current_period['end'] = last_active_scan_timestamp
+    current_period['date'] = pendulum.from_timestamp(last_active_scan_timestamp).to_date_string()
     periods.append(current_period)
-    daily_summary = []
 
-    last_day = None
-    last_duration = pendulum.duration(minutes=0)
+    pivot = defaultdict(list)
+    for item in periods:
+        time_period = pendulum.from_timestamp(item['end']) - pendulum.from_timestamp(item['start'])
+        pivot[item['date']].append(time_period.in_minutes())
+
+    daily_summary = [{'start': k, 'total_duration': sum(values)} for k, values in pivot.items()]
+    for item in daily_summary:
+        duration = pendulum.duration(minutes=item['total_duration'])
+        item['title'] = "Daily total : {hours:02}:{minutes:02}".format(hours=duration.hours, minutes=duration.minutes),
+        item['color'] = '#257e4a'
+
     for period in periods:
         time_period = pendulum.from_timestamp(period['end']) - pendulum.from_timestamp(period['start'])
         duration = pendulum.duration(minutes=time_period.in_minutes())
         period['title'] = "Total : {hours:02}:{minutes:02}".format(hours=duration.hours, minutes=duration.minutes)
-        current_date_string = pendulum.from_timestamp(period['start']).to_date_string()
-
-        if not last_day or last_day == current_date_string:
-            last_duration += duration
-        else:
-            daily_summary.append(
-                {
-                    'title': "Daily total : {hours:02}:{minutes:02}".format(hours=duration.hours, minutes=duration.minutes),
-                    'start': last_day
-                 })
-
-        last_day = current_date_string
-
         period['start'] = pendulum.from_timestamp(period['start']).isoformat()
         period['end'] = pendulum.from_timestamp(period['end']).isoformat()
-
-    daily_summary.append(
-        {
-            'title': "Daily total : {hours:02}:{minutes:02}".format(hours=last_duration.hours, minutes=last_duration.minutes),
-            'start': last_day
-        })
 
     return jsonify(periods + daily_summary)
 
