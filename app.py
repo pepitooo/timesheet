@@ -89,8 +89,6 @@ def get_events():
         period['start'] = pendulum.from_timestamp(period['start']).isoformat()
         period['end'] = pendulum.from_timestamp(period['end']).isoformat()
 
-    print(daily_no_break_summary)
-    print(daily_summary)
     return jsonify(periods + daily_summary + daily_no_break_summary)
 
 
