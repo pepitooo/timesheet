@@ -5,12 +5,17 @@
   $(function() {
 
     $('#calendar').fullCalendar({
-        header: { center: 'month,agendaWeek' },
+        header: { center: 'month,listWeek,agendaWeek' },
         views: {
             month: { // name of view
                 titleFormat: 'DD MMM YYYY',
+                buttonText: 'Month'
             },
             week: { // name of view
+                buttonText: 'Week'
+            },
+            listWeek: {
+                buttonText: 'List week'
             }
         },
         defaultView: 'agendaWeek',
@@ -26,7 +31,8 @@
         events: 'events.json',
         timeFormat: 'H:mm',
         slotLabelFormat: 'H:mm',
-        timezone: 'local'
+        timezone: 'local',
+        nowIndicator: true
     });
 
   });
