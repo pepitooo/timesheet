@@ -39,3 +39,7 @@ using this method should be fully automated, but you HAVE to change the bluetoot
 
 and you should have access to the web page directly via the ip address of the raspberry
 
+```
+sudo nano /etc/cron.d/timesheet
+```
+
