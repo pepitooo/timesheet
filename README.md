@@ -28,3 +28,11 @@ then you have access to the web app with this [url](http://127.0.0.1:5000/)
 * make sure the db file is created by and have data in it
 * make sure you setup correctly your python environment (pip install)
 * make sure you setup correctly your webapp dependencies (bower)
+
+# Installation on a raspberry pi 3 (tested on raspbian)
+
+```
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/pepitooo/timesheet/master/timesheet_on_raspbian.sh)"
+```
+
+
