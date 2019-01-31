@@ -107,3 +107,4 @@ static/bower_components
 bluetooth-scan.db
 bin
 share
+include
