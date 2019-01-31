@@ -14,7 +14,7 @@ pip install -r requirements.txt
 cd static
 bower install
  
-sudo cp /home/pi/timesheet/config_files/supervisor timesheet.conf
+sudo cp /home/pi/timesheet/config_files/supervisor /etc/supervisor/conf.d/timesheet.conf
 sudo cp /home/pi/timesheet/config_files/nginx /etc/nginx/nginx.conf
 sudo cp /home/pi/timesheet/config_files/cron /etc/cron.d/timesheet
 sudo chmod +x /etc/cron.d/timesheet
