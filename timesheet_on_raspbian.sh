@@ -9,7 +9,7 @@ cd
 git clone https://github.com/pepitooo/timesheet.git
 cd timesheet
 virtualenv -p python3 .
-source bin/activate
+. bin/activate
 pip install -r requirements.txt 
 cd static
 bower install
