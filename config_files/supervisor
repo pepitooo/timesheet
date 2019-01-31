@@ -1,0 +1,8 @@
+[program:timesheet-uwsgi]
+directory=/home/pi/timesheet/
+command=/home/pi/timesheet/bin/uwsgi --ini uwsgi.ini
+user=root
+autostart=true
+autorestart=true
+startretries=5
+
