@@ -18,3 +18,7 @@ sudo cp /home/pi/timesheet/config_files/supervisor timesheet.conf
 sudo cp /home/pi/timesheet/config_files/nginx /etc/nginx/nginx.conf
 sudo cp /home/pi/timesheet/config_files/cron /etc/cron.d/timesheet
 sudo chmod +x /etc/cron.d/timesheet
+
+sudo service nginx restart
+sudo service supervisor restart
+
