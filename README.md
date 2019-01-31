@@ -35,4 +35,6 @@ then you have access to the web app with this [url](http://127.0.0.1:5000/)
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/pepitooo/timesheet/master/timesheet_on_raspbian.sh)"
 ```
 
+using this method should be fully automated, but you HAVE to change the bluetooth MAC address inside `/etc/cront.d/timesheet`
+
 
