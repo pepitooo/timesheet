@@ -6,3 +6,10 @@ autostart=true
 autorestart=true
 startretries=5
 
+[program:timesheet-celery]
+directory=/home/pi/timesheet/
+command=/home/pi/timesheet/bin/celery -A spy_me worker --loglevel=INFO -B -Ofair
+user=root
+autostart=true
+autorestart=true
+startretries=5
