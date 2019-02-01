@@ -3,3 +3,4 @@ Flask
 SQLObject==3.7.0
 uwsgi
 celery
+redis
