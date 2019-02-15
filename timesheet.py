@@ -92,6 +92,8 @@ def get_events():
     for period in periods:
         time_period = pendulum.from_timestamp(period['end']) - pendulum.from_timestamp(period['start'])
         duration = pendulum.duration(minutes=time_period.in_minutes())
+        if not time_period.in_minutes():
+            continue
         period['title'] = "{hours:02}:{minutes:02}".format(hours=duration.hours, minutes=duration.minutes)
         period['start'] = pendulum.from_timestamp(period['start']).isoformat()
         period['end'] = pendulum.from_timestamp(period['end']).isoformat()
