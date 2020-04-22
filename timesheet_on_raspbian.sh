@@ -2,7 +2,7 @@
 
 sudo apt update
 sudo apt upgrade -y
-sudo apt install -y supervisor nginx python3 sqlite3 virtualenv git npm redis-server
+sudo apt install -y supervisor nginx python3 sqlite3 virtualenv git npm redis-server python3-dev
 sudo npm install -g bower
 
 cd
